@@ -6,7 +6,7 @@
 #    By: cboussau <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/24 14:53:02 by cboussau          #+#    #+#              #
-#    Updated: 2017/08/24 16:29:41 by cboussau         ###   ########.fr        #
+#    Updated: 2017/08/26 15:21:23 by cboussau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,9 @@ NAME = libft_malloc_$(HOSTTYPE).so
 C_DIR =	src
 C_DIRS = $(shell find $(C_DIR) -type d -follow -print)
 C_FILES = $(shell find $(C_DIRS) -type f -follow -print | grep "\.c")
+
+TEST_FILES = tests/malloc_main.c
+TEST_BIN = test_malloc
 
 O_DIR =	.tmp/obj
 O_DIRS = $(C_DIRS:$(C_DIR)%=$(O_DIR)%)
@@ -38,6 +41,10 @@ $(NAME): $(O_FILES)
 		gcc $(FLAGS) -shared $^ $(LIB) -o $@
 		@ln -s $(NAME) libft_malloc.so
 		echo "\\033[32m$(NAME) has been created !\\033[0;39m"
+
+test: $(O_FILES)
+		make -C libft
+		$(CC) $(FLAGS) $^ $(TEST_FILES) $(INCLUDES) $(LIB) -o $(TEST_BIN)
 
 $(O_DIR)%.o: $(C_DIR)%.c
 		mkdir -p $(O_DIRS) $(O_DIR)
