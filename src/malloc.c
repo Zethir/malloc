@@ -6,29 +6,58 @@
 /*   By: cboussau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 15:39:37 by cboussau          #+#    #+#             */
-/*   Updated: 2017/08/27 19:11:59 by cboussau         ###   ########.fr       */
+/*   Updated: 2017/08/27 22:21:35 by cboussau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <malloc.h>
 
+void	*allocate_tiny(size_t size)
+{
+	t_block	*block;
+	
+	if ((block = check_size(&(g_zone.tiny), size)))
+		put_in_block(&block, size);
+	else if ((block = check_free_block(&(g_zone.tiny), size + sizeof(t_block))))
+		split_block(&block, size);
+	else if (generate_tiny_block(&block, size) == 1)
+		return (NULL);
+	return (block->mem);
+}
+
+void	*allocate_small(size_t size)
+{
+	t_block	*block;
+	
+	if ((block = check_size(&(g_zone.small), size)))
+		put_in_block(&block, size);
+	else if ((block = check_free_block(&(g_zone.small), size + sizeof(t_block))))
+		split_block(&block, size);
+	else if (generate_small_block(&block, size) == 1)
+		return (NULL);
+	return (block->mem);
+}
+
 void	*allocate_large(size_t size)
 {
 	t_block	*block;
 	
-	if ((block = last_node(&(g_zone.large_zone))))
-	{
-		if ((block->next = (t_block *)mmap(0, size, PROT, MAP, -1, 0))
-				== MAP_FAILED)
-			return (MAP_FAILED);
-		block = block->next;
-	}
-	else
-	{
-		if ((g_zone.large_zone = (t_block *)mmap(0, size, PROT, MAP, -1, 0))
-				== MAP_FAILED)
-			return (MAP_FAILED);
-		block = g_zone.large_zone;
+	if (!(block = check_free_block(&(g_zone.large), size)))
+	{	
+		if ((block = last_node(&(g_zone.large))))
+		{
+			if ((block->next = (t_block *)mmap(0, size, PROT, MAP, -1, 0))
+					== MAP_FAILED)
+				return (NULL);
+			block = block->next;
+		}
+		else
+		{
+			if ((g_zone.large = (t_block *)mmap(0, size, PROT, MAP, -1, 0))
+					== MAP_FAILED)
+				return (NULL);
+			block = g_zone.large;
+		}
 	}
 	block->size = size;
 	block->free = 0;
@@ -40,7 +69,7 @@ void	*malloc(size_t size)
 {
 	void	*mem;
 
-/*	
+	
  	if (size <= 0)
 		return (NULL);
  	if (size <= TINY_SIZE)
@@ -48,10 +77,8 @@ void	*malloc(size_t size)
 	else if (size <= SMALL_SIZE)
 		mem = allocate_small(size);
 	else
-	{*/
 		mem = allocate_large(size + sizeof(t_block));
-//	}
-//	if (mem = MAP_FAILED)
-//		return (NULL);
+	if (!mem)
+		return (NULL);
 	return (mem);
 }
