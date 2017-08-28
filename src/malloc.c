@@ -20,7 +20,7 @@ void	*allocate_tiny(size_t size)
 		put_in_block(&block, size);
 	else if ((block = check_free_block(&(g_zone.tiny), size + sizeof(t_block))))
 		split_block(&block, size);
-	else if (generate_tiny_block(&block, size) == 1)
+	else if ((block = generate_tiny_block(size)) == NULL)
 		return (NULL);
 	return (block->mem);
 }
@@ -33,7 +33,7 @@ void	*allocate_small(size_t size)
 		put_in_block(&block, size);
 	else if ((block = check_free_block(&(g_zone.small), size + sizeof(t_block))))
 		split_block(&block, size);
-	else if (generate_small_block(&block, size) == 1)
+	else if ((block = generate_small_block(size)) == NULL)
 		return (NULL);
 	return (block->mem);
 }
