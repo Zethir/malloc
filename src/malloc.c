@@ -42,24 +42,21 @@ void	*allocate_large(size_t size)
 {
 	t_block	*block;
 	
-	if (!(block = check_free_block(&(g_zone.large), size)))
+	if ((block = last_node(&(g_zone.large))))
 	{	
-		if ((block = last_node(&(g_zone.large))))
-		{
-			if ((block->next = (t_block *)mmap(0, size, PROT, MAP, -1, 0))
-					== MAP_FAILED)
-				return (NULL);
-			block = block->next;
-		}
-		else
-		{
-			if ((g_zone.large = (t_block *)mmap(0, size, PROT, MAP, -1, 0))
-					== MAP_FAILED)
-				return (NULL);
-			block = g_zone.large;
-		}
+		if ((block->next = (t_block *)mmap(0, size, PROT, MAP, -1, 0))
+				== MAP_FAILED)
+			return (NULL);
+		block = block->next;
 	}
-	block->size = size;
+	else
+	{
+		if ((g_zone.large = (t_block *)mmap(0, size, PROT, MAP, -1, 0))
+				== MAP_FAILED)
+			return (NULL);
+		block = g_zone.large;
+	}
+	block->size = size - sizeof(t_block);
 	block->free = 0;
 	block->mem = block + 1;
 	return (block->mem);

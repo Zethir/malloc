@@ -50,6 +50,7 @@ t_zone				g_zone;
 void				*malloc(size_t size);
 void				free(void *ptr);
 void				*realloc(void *ptr, size_t size);
+void				show_alloc_mem();
 
 void				*allocate_tiny(size_t size);
 void				*allocate_small(size_t size);
