@@ -57,11 +57,15 @@ void				*allocate_small(size_t size);
 void				*allocate_large(size_t size);
 void				put_in_block(t_block **block, size_t size);
 void				split_block(t_block **block, size_t size);
+void				free_large(t_block *block);
+void				free_hub(t_block *block, size_t zone_size);
 
 t_block				*generate_tiny_block(size_t size);
 t_block				*generate_small_block(size_t size);
 t_block				*check_free_block(t_block **head, size_t size);
 t_block				*check_size(t_block **head, size_t size);
 t_block				*last_node(t_block **head);
+t_block				*search_node(t_block *head, void *mem);
+t_block				*search_mem(void *mem);
 
 #endif
