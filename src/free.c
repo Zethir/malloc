@@ -6,24 +6,29 @@
 /*   By: cboussau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 15:40:32 by cboussau          #+#    #+#             */
-/*   Updated: 2017/08/23 15:50:26 by cboussau         ###   ########.fr       */
+/*   Updated: 2017/08/30 21:57:59 by cboussau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <malloc.h>
 
-void	free_hub(t_block *block, size_t zone_size)
+void	free_hub(t_block *block, t_block *header)
 {
-	block = NULL;
-	zone_size = 0;
+	while (header)
+	{
+		if (header == block)
+		{
+			header->free = 1;
+			return ;
+		}
+		header = header->next;
+	}
 }
 
-void	free_large(t_block *block)
+void	free_large(t_block *block, t_block *header)
 {
-	t_block *header;
 	t_block	*prev;
 
-	header = g_zone.large;
 	prev = NULL;
 	while (header)
 	{
@@ -31,7 +36,7 @@ void	free_large(t_block *block)
 		{
 			if (prev)
 				prev->next = header->next;
-			if (header->next)
+			else if (header->next)
 				g_zone.large = header->next;
 			else
 				g_zone.large = NULL;
@@ -53,9 +58,9 @@ void	free(void *ptr)
 	if (!block)
 		return ;
 	if (block->size <= TINY_SIZE)
-		free_hub(block, TINY_SIZE);
+		free_hub(block, g_zone.tiny);
 	else if (block->size <= SMALL_SIZE)
-		free_hub(block, SMALL_SIZE);
+		free_hub(block, g_zone.small);
 	else
-		free_large(block);
+		free_large(block, g_zone.large);
 }

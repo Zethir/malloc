@@ -6,7 +6,7 @@
 /*   By: cboussau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 15:46:16 by cboussau          #+#    #+#             */
-/*   Updated: 2017/08/27 22:06:50 by cboussau         ###   ########.fr       */
+/*   Updated: 2017/08/30 21:56:01 by cboussau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ void				*allocate_small(size_t size);
 void				*allocate_large(size_t size);
 void				put_in_block(t_block **block, size_t size);
 void				split_block(t_block **block, size_t size);
-void				free_large(t_block *block);
-void				free_hub(t_block *block, size_t zone_size);
+void				free_large(t_block *block, t_block *header);
+void				free_hub(t_block *block, t_block *header);
 
 t_block				*generate_tiny_block(size_t size);
 t_block				*generate_small_block(size_t size);
