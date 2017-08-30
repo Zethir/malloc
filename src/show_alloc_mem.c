@@ -6,13 +6,13 @@
 /*   By: cboussau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/29 15:40:32 by cboussau          #+#    #+#             */
-/*   Updated: 2017/08/29 15:50:26 by cboussau         ###   ########.fr       */
+/*   Updated: 2017/08/31 00:10:20 by cboussau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <malloc.h>
 
-size_t		print_alloc_mem(t_block	*block, char *type_mem)
+size_t		print_alloc_mem(t_block *block, char *type_mem)
 {
 	size_t	sum_alloc;
 
@@ -35,14 +35,14 @@ size_t		print_alloc_mem(t_block	*block, char *type_mem)
 		block = block->next;
 	}
 	return (sum_alloc);
-
 }
 
-void		show_alloc_mem()
+void		show_alloc_mem(void)
 {
 	size_t	sum_alloc;
 
 	sum_alloc = 0;
+	pthread_mutex_lock(&g_mutex);
 	if (g_zone.tiny)
 		sum_alloc += print_alloc_mem(g_zone.tiny, "TINY : ");
 	if (g_zone.small)
@@ -52,4 +52,5 @@ void		show_alloc_mem()
 	ft_putstr("Total : ");
 	ft_putnbr(sum_alloc);
 	ft_putstr(" octets\n");
+	pthread_mutex_unlock(&g_mutex);
 }

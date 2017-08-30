@@ -6,24 +6,11 @@
 /*   By: cboussau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 15:40:32 by cboussau          #+#    #+#             */
-/*   Updated: 2017/08/30 21:57:59 by cboussau         ###   ########.fr       */
+/*   Updated: 2017/08/30 23:53:38 by cboussau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <malloc.h>
-
-void	free_hub(t_block *block, t_block *header)
-{
-	while (header)
-	{
-		if (header == block)
-		{
-			header->free = 1;
-			return ;
-		}
-		header = header->next;
-	}
-}
 
 void	free_large(t_block *block, t_block *header)
 {
@@ -55,12 +42,12 @@ void	free(void *ptr)
 	if (!ptr)
 		return ;
 	block = search_mem(ptr);
+	pthread_mutex_lock(&g_mutex);
 	if (!block)
 		return ;
-	if (block->size <= TINY_SIZE)
-		free_hub(block, g_zone.tiny);
-	else if (block->size <= SMALL_SIZE)
-		free_hub(block, g_zone.small);
+	if (block->size <= TINY_SIZE || block->size <= SMALL_SIZE)
+		block->free = 1;
 	else
 		free_large(block, g_zone.large);
+	pthread_mutex_unlock(&g_mutex);
 }

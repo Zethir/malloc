@@ -6,7 +6,7 @@
 /*   By: cboussau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/27 17:46:20 by cboussau          #+#    #+#             */
-/*   Updated: 2017/08/27 22:16:37 by cboussau         ###   ########.fr       */
+/*   Updated: 2017/08/31 00:05:09 by cboussau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_block		*check_free_block(t_block **head, size_t size)
 t_block		*check_size(t_block **head, size_t size)
 {
 	t_block	*tmp;
-	
+
 	tmp = *head;
 	while (tmp)
 	{
@@ -62,7 +62,7 @@ void		put_in_block(t_block **block, size_t size)
 	tmp->mem = tmp + 1;
 }
 
-void		split_block(t_block	**block, size_t size)
+void		split_block(t_block **block, size_t size)
 {
 	t_block	*new_block;
 	t_block	*scrap_block;
@@ -76,12 +76,10 @@ void		split_block(t_block	**block, size_t size)
 	new_block->free = 0;
 	new_block->mem = new_block + 1;
 	new_block->next = (void *)new_block->mem + size;
-
 	scrap_block = new_block->next;
 	scrap_block->size = new_block->size - size - sizeof(t_block);
 	scrap_block->free = 1;
 	scrap_block->mem = scrap_block + 1;
-
 	new_block->size = size;
 	scrap_block->next = next_block;
 }

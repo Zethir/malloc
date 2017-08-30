@@ -6,13 +6,13 @@
 /*   By: cboussau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/27 21:18:41 by cboussau          #+#    #+#             */
-/*   Updated: 2017/08/30 21:09:32 by cboussau         ###   ########.fr       */
+/*   Updated: 2017/08/31 00:08:18 by cboussau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <malloc.h>
 
-t_block *search_node(t_block *block, void *mem)
+t_block		*search_node(t_block *block, void *mem)
 {
 	while (block)
 	{
@@ -23,7 +23,7 @@ t_block *search_node(t_block *block, void *mem)
 	return (NULL);
 }
 
-t_block	*search_mem(void *mem)
+t_block		*search_mem(void *mem)
 {
 	t_block	*block;
 

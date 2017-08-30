@@ -6,7 +6,7 @@
 /*   By: cboussau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 15:39:37 by cboussau          #+#    #+#             */
-/*   Updated: 2017/08/27 22:21:35 by cboussau         ###   ########.fr       */
+/*   Updated: 2017/08/31 00:07:33 by cboussau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	*allocate_tiny(size_t size)
 {
 	t_block	*block;
-	
+
 	if ((block = check_size(&(g_zone.tiny), size)))
 		put_in_block(&block, size);
 	else if ((block = check_free_block(&(g_zone.tiny), size + sizeof(t_block))))
@@ -28,10 +28,11 @@ void	*allocate_tiny(size_t size)
 void	*allocate_small(size_t size)
 {
 	t_block	*block;
-	
+
 	if ((block = check_size(&(g_zone.small), size)))
 		put_in_block(&block, size);
-	else if ((block = check_free_block(&(g_zone.small), size + sizeof(t_block))))
+	else if ((block = check_free_block(&(g_zone.small),
+					size + sizeof(t_block))))
 		split_block(&block, size);
 	else if ((block = generate_small_block(size)) == NULL)
 		return (NULL);
@@ -41,9 +42,9 @@ void	*allocate_small(size_t size)
 void	*allocate_large(size_t size)
 {
 	t_block	*block;
-	
+
 	if ((block = last_node(&(g_zone.large))))
-	{	
+	{
 		if ((block->next = (t_block *)mmap(0, size, PROT, MAP, -1, 0))
 				== MAP_FAILED)
 			return (NULL);
@@ -62,14 +63,13 @@ void	*allocate_large(size_t size)
 	return (block->mem);
 }
 
-void	*malloc(size_t size)
+void	*malloc_hub(size_t size)
 {
 	void	*mem;
 
-	
- 	if (size <= 0)
+	if (size <= 0)
 		return (NULL);
- 	if (size <= TINY_SIZE)
+	if (size <= TINY_SIZE)
 		mem = allocate_tiny(size);
 	else if (size <= SMALL_SIZE)
 		mem = allocate_small(size);
@@ -77,5 +77,15 @@ void	*malloc(size_t size)
 		mem = allocate_large(size + sizeof(t_block));
 	if (!mem)
 		return (NULL);
+	return (mem);
+}
+
+void	*malloc(size_t size)
+{
+	void	*mem;
+
+	pthread_mutex_lock(&g_mutex);
+	mem = malloc_hub(size);
+	pthread_mutex_unlock(&g_mutex);
 	return (mem);
 }

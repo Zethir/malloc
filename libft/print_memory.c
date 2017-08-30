@@ -6,7 +6,7 @@
 /*   By: cboussau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/29 15:40:32 by cboussau          #+#    #+#             */
-/*   Updated: 2017/08/29 15:50:26 by cboussau         ###   ########.fr       */
+/*   Updated: 2017/08/31 00:04:37 by cboussau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	print_hexa(unsigned long addr)
 {
-	const char	*hex; 
-	
+	const char	*hex;
+
 	hex = "0123456789abcdef";
 	if (addr >= 16)
 	{
