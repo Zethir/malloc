@@ -52,7 +52,7 @@ void	*realloc(void *ptr, size_t size)
 	if (!block)
 		return (NULL);
 	if (block->size > size)
-		return (NULL);
+		return (block->mem);
 	pthread_mutex_lock(&g_mutex);
 	mem = realloc_hub(block, size);
 	pthread_mutex_unlock(&g_mutex);
