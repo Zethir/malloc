@@ -83,7 +83,7 @@ void	*malloc_hub(size_t size)
 void	*malloc(size_t size)
 {
 	void	*mem;
-	
+
 	pthread_mutex_lock(&g_mutex);
 	mem = malloc_hub(size);
 	pthread_mutex_unlock(&g_mutex);
