@@ -27,7 +27,7 @@ void	*realloc_hub(t_block *block, size_t size)
 	void	*new_block;
 
 	if (block->next && block->next->free &&
-			block->next->size > size + block->size)
+			block->next->size > size - block->size + 1)
 	{
 		if (block->size <= TINY_SIZE || block->size <= SMALL_SIZE)
 			return (join_block(block, size));
@@ -36,8 +36,8 @@ void	*realloc_hub(t_block *block, size_t size)
 	}
 	else if (!(new_block = malloc(size)))
 		return (NULL);
+	ft_memcpy(new_block, block->mem, block->size);
 	free(block->mem);
-	ft_memcpy(new_block, block, block->size);
 	return (new_block);
 }
 
