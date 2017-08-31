@@ -39,7 +39,7 @@ $(NAME): $(O_FILES)
 		echo "\\033[1;34mCompiling LIBFT...\\033[0;39m"
 		make -C libft
 		gcc $(FLAGS) -shared $^ $(LIB) -o $@
-		@ln -s $(NAME) libft_malloc.so
+		@ln -fs $(NAME) libft_malloc.so
 		echo "\\033[32m$(NAME) has been created !\\033[0;39m"
 
 test: $(O_FILES)
