@@ -6,7 +6,7 @@
 /*   By: cboussau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 15:41:20 by cboussau          #+#    #+#             */
-/*   Updated: 2017/09/04 16:44:12 by cboussau         ###   ########.fr       */
+/*   Updated: 2017/09/04 17:15:23 by cboussau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	*realloc(void *ptr, size_t size)
 {
 	t_block	*block;
 	void	*mem;
-	
+
 	if (!ptr)
 		return (malloc(size));
 	block = search_mem(ptr);
