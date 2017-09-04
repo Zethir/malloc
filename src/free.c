@@ -6,7 +6,7 @@
 /*   By: cboussau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 15:40:32 by cboussau          #+#    #+#             */
-/*   Updated: 2017/08/30 23:53:38 by cboussau         ###   ########.fr       */
+/*   Updated: 2017/09/04 14:54:23 by cboussau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ void	free(void *ptr)
 
 	if (!ptr)
 		return ;
-	block = search_mem(ptr);
 	pthread_mutex_lock(&g_mutex);
+	block = search_mem(ptr);
 	if (!block)
 		return ;
 	if (block->size <= TINY_SIZE || block->size <= SMALL_SIZE)

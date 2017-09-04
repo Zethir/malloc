@@ -6,7 +6,7 @@
 /*   By: cboussau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 15:46:16 by cboussau          #+#    #+#             */
-/*   Updated: 2017/08/31 00:10:33 by cboussau         ###   ########.fr       */
+/*   Updated: 2017/09/04 16:45:06 by cboussau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <sys/mman.h>
-# include <sys/resource.h>
 # include <pthread.h>
 # include <libft.h>
 
